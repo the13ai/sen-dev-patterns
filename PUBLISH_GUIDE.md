@@ -1,133 +1,111 @@
-# Sen 开发提效 Skill - 发布指南
+# Sen-Dev-Patterns 发布指南
 
-## 发布状态
+## GitHub 发布成功！✓
 
-**✅ Skill已准备就绪，可随时发布到ClawHub市场**
-
----
-
-## 快速发布（推荐）
-
-### 方法1：网页发布（最简单）
-
-#### 步骤1：访问发布页面
-打开浏览器访问：
-```
-https://clawhub.ai/import
-```
-
-#### 步骤2：填写表单
-| 字段 | 值 |
-|------|-----|
-| Slug | `sen-dev-patterns` |
-| Display name | `Sen开发提效Skill` |
-| Version | `1.3.0` |
-| Tags | `latest` |
-| Folder | 上传整个 `sen-dev-patterns` 文件夹 |
-
-#### 步骤3：登录并发布
-- 使用GitHub账户登录
-- 点击发布按钮
+**仓库地址**: https://github.com/the13ai/sen-dev-patterns
 
 ---
 
-### 方法2：使用clawhub CLI
+## 提交到 ClawHub 市场
 
-#### 1. 安装Node.js
-访问 https://nodejs.org 下载安装
+### 方式一：通过 GitHub 导入（推荐）
 
-#### 2. 安装clawhub CLI
+1. 访问 https://clawhub.ai/import
+2. 选择 "Import from GitHub"
+3. 授权 GitHub 账号
+4. 选择仓库 `the13ai/sen-dev-patterns`
+5. 填写信息并提交审核
+
+### 方式二：手动导入
+
+1. 访问 https://clawhub.ai/import
+2. 选择 "Upload ZIP"
+3. 下载仓库ZIP: https://github.com/the13ai/sen-dev-patterns/archive/refs/heads/master.zip
+4. 上传并填写信息
+
+---
+
+## 国内分发方案
+
+### Gitee（码云）- 国内可直接访问
+
 ```bash
-npm i -g clawhub
+# 方式1: 使用脚本
+python publish_gitee.py
+
+# 方式2: 手动
+git remote add gitee https://gitee.com/the13ai/sen-dev-patterns.git
+git push -u gitee master
 ```
 
-#### 3. 登录
-```bash
-clawhub login
+**Gitee Token 获取**:
+1. 访问 https://gitee.com/oauth/applications
+2. 创建应用，勾选 `projects` 权限
+3. 获取 Access Token
+4. 设置: `set GITEE_TOKEN=your_token`
+
+---
+
+## 本地开发
+
+### 目录结构
+
+```
+sen-dev-patterns/
+├── SKILL.md                    # Skill主文件（含metadata）
+├── README.md                   # 市场展示页
+├── references/                 # 参考文档库（11个）
+│   ├── ui-style-guide.md       # UI样式规范
+│   ├── coding-standards.md     # 编程规范
+│   ├── algorithm-library.md    # 算法库
+│   ├── pitfalls-record.md      # 踩坑记录
+│   └── ...
+└── scripts/
+    └── init_module.py          # 模块初始化
 ```
 
-#### 4. 发布
+### 测试 Skill
+
+在 CodeBuddy IDE 中：
+1. 打开 Skill 管理
+2. 添加本地 Skill
+3. 选择此文件夹
+
+---
+
+## 更新发布
+
 ```bash
-clawhub publish ~/.codebuddy/skills/sen-dev-patterns \
-  --slug sen-dev-patterns \
-  --name "Sen开发提效Skill" \
-  --version 1.3.0 \
-  --changelog "v1.3.0: UI规范、算法库、踩坑记录、Web开发规范、Git工作流" \
-  --tags latest
+# 1. 更新代码
+git add -A
+git commit -m "Update description"
+
+# 2. 推送到GitHub
+git push origin master
+
+# 3. 推送到Gitee（如配置了）
+git push gitee master
+
+# 4. 在ClawHub市场更新版本
 ```
 
 ---
 
-## Skill信息
+## 文件说明
 
-| 项目 | 内容 |
+| 文件 | 说明 |
 |------|------|
-| 名称 | sen-dev-patterns |
-| 版本 | 1.3.0 |
-| 作者 | 很拽的猪 |
-| 描述 | 个人开发提效Skill |
-| 亮点 | 满意度加权公式、水晶质感UI、跨平台适配 |
-| 文件数 | 14个文档 |
-| 质量评分 | 9.0/10 |
+| SKILL.md | Skill主文件，CodeBuddy加载此文件 |
+| README.md | 市场展示页面 |
+| references/ | 参考文档库 |
+| publish_gitee.py | Gitee发布脚本 |
+| publish_skill.py | GitHub发布脚本 |
 
 ---
 
-## 发布后验证
+## 版本历史
 
-发布成功后访问：`https://clawhub.ai/skills/sen-dev-patterns`
-
----
-
-*最后更新: 2026-04-24*
-
----
-
-## NPM 发布方法
-
-### 前提条件
-安装 Node.js: https://nodejs.org (LTS版本)
-
-### 发布步骤
-
-```bash
-# 1. 安装 Node.js 后，打开终端
-# 2. 进入项目目录
-cd ~/.codebuddy/skills/sen-dev-patterns
-
-# 3. 登录 npm (如果没有账号，先去 https://www.npmjs.com 注册)
-npm login
-
-# 4. 发布包
-npm publish --access public
-```
-
-### NPM 发布检查清单
-- [x] package.json 已创建，包含正确的 keywords
-- [x] version 字段为 1.3.0
-- [ ] 执行 npm login
-- [ ] 执行 npm publish --access public
-- [ ] 验证发布成功: https://www.npmjs.com/package/sen-dev-patterns
-
-### NPM 发布 API
-
-**发布命令**:
-```bash
-npm publish --access public
-```
-
-**所需权限**: npm 账号 (免费账号即可发布 public 包)
-
-**注意事项**:
-- 包名 `sen-dev-patterns` 已被占用？可改为 `sen-dev-patterns-skill`
-- 每个 npm 版本号只能使用一次，发布前确保 version 正确
-
----
-
-## 各平台发布状态
-
-| 平台 | 状态 | 地址 |
-|------|------|------|
-| GitHub | ✅ 已发布 | https://github.com/the13ai/sen-dev-patterns |
-| Gitee | ⏳ 待配置 | 需要 Gitee Token |
-| NPM | ⏳ 待发布 | 需要 Node.js + npm 账号 |
-| ClawHub | ⏳ 待提交 | https://clawhub.ai/import |
+- **v1.3.0**: 完善metadata和市场展示，包含11个参考文档
+- **v1.2.0**: 添加算法库、踩坑记录
+- **v1.1.0**: 完善UI规范、代码模块
+- **v1.0.0**: 初始版本
