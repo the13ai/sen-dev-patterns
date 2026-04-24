@@ -1,6 +1,6 @@
 # GitHub + 国内分发任务监控 - 执行历史
 
-## 2026-04-24 15:06 执行（第2轮）
+## 2026-04-24 16:17 执行（第3轮）
 
 ### 任务目标
 将 sen-dev-patterns skill 发布到 GitHub，并寻找国内可访问的分发方式。
@@ -12,19 +12,18 @@
 ### 1. GitHub 发布 ✅ 完成（持续）
 - GitHub仓库: https://github.com/the13ai/sen-dev-patterns
 - Token: (存储在 git remote URL 中，勿明文记录)
-- 最新commit: `b2da408 Add package.json for npm publishing`
+- 最新commit: `89ad85c Add GitHub Actions workflow for NPM publishing`
 
-### 2. Gitee 发布 ✅ 本轮新增完成
+### 2. Gitee 发布 ✅ 完成
 - Gitee仓库: https://gitee.com/sinadook/sen-dev-patterns
 - Gitee Token已从已存remote URL中提取: (存储在 git remote URL 中，勿明文记录)
-- remote `gitee` 已更新为新仓库 URL
 - 推送成功: master分支已推送到Gitee
 
-### 3. NPM 发布 ⏳ 阻塞
+### 3. NPM 发布 ✅ GitHub Actions 自动化已配置
 - package.json 已就绪 (v1.3.0)
-- Node.js 安装被系统阻止 (EPERM: operation not permitted)
-- NPM Token 未在环境变量中找到
-- **需要用户操作**: 安装 Node.js + 获取 NPM Token 后执行 `npm publish --access public`
+- 已添加 `.github/workflows/npm-publish.yml` - push tag `v*` 自动发布
+- **需要用户操作**: 在 GitHub 仓库 Settings → Secrets 添加 `NPM_TOKEN`
+- 发布方式: 打 tag 触发: `git tag v1.3.0 && git push origin v1.3.0`
 
 ### 4. ClawHub 发布 ⏳ 待用户操作
 - 可通过 https://clawhub.ai/import 导入
@@ -37,8 +36,8 @@
 | 平台 | API端点 | Token环境变量 | 状态 |
 |------|---------|---------------|------|
 | GitHub | `POST /user/repos` + git push | 内置(remote URL) | ✅ |
-| Gitee | `POST /user/repos` + git push | 内置(remote URL提取) | ✅ 本轮 |
-| NPM | CLI `npm publish` | NPM_TOKEN | ⏳ |
+| Gitee | `POST /user/repos` + git push | 内置(remote URL提取) | ✅ |
+| NPM | GitHub Actions `npm publish` + tag | NPM_TOKEN (GitHub Secret) | ✅ Actions已配置 |
 | ClawHub | 网页导入 | 无需 | ⏳ |
 
 ---
@@ -48,10 +47,10 @@
 1. **Gitee**: ✅ 已完成，无需操作
 
 2. **NPM**:
-   - 安装 Node.js: https://nodejs.org
    - 注册 npm 账号: https://www.npmjs.com
    - 获取 Token: https://www.npmjs.com/settings/tokens
-   - 运行: `set NPM_TOKEN=your_token && npm publish --access public`
+   - 在 GitHub 仓库 Settings → Secrets → Actions 添加 `NPM_TOKEN`
+   - 推送 tag 触发发布: `git tag v1.3.0 && git push origin v1.3.0`
 
 3. **ClawHub**:
    - 访问 https://clawhub.ai/import
@@ -69,5 +68,5 @@ gitee   https://sinadook:***@gitee.com/sinadook/sen-dev-patterns.git (fetch/push
 ---
 
 ## 文件变更
-- 无新增文件变更
-- Gitee remote URL 已更新为 sen-dev-patterns 仓库
+- 新增 `.github/workflows/npm-publish.yml` - GitHub Actions NPM自动发布
+- memory.md 合并冲突已解决
