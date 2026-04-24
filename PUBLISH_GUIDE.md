@@ -103,6 +103,27 @@ git push gitee master
 
 ---
 
+## 下一步操作
+
+### 1. 提交到 ClawHub 市场
+
+访问以下链接直接导入：
+```
+https://clawhub.ai/import?repo=the13ai/sen-dev-patterns
+```
+
+### 2. 发布到 Gitee（国内访问）
+
+**手动方式（推荐，无需Token）**：
+1. 打开 https://gitee.com/new
+2. 创建仓库，名称填 `sen-dev-patterns`
+3. 运行：
+   ```bash
+   cd C:\Users\sen\.codebuddy\skills\sen-dev-patterns
+   git remote add gitee https://gitee.com/the13ai/sen-dev-patterns.git
+   git push -u gitee master
+   ```
+
 ## 版本历史
 
 - **v1.3.0**: 完善metadata和市场展示，包含11个参考文档
