@@ -79,3 +79,55 @@ clawhub publish ~/.codebuddy/skills/sen-dev-patterns \
 ---
 
 *最后更新: 2026-04-24*
+
+---
+
+## NPM 发布方法
+
+### 前提条件
+安装 Node.js: https://nodejs.org (LTS版本)
+
+### 发布步骤
+
+```bash
+# 1. 安装 Node.js 后，打开终端
+# 2. 进入项目目录
+cd ~/.codebuddy/skills/sen-dev-patterns
+
+# 3. 登录 npm (如果没有账号，先去 https://www.npmjs.com 注册)
+npm login
+
+# 4. 发布包
+npm publish --access public
+```
+
+### NPM 发布检查清单
+- [x] package.json 已创建，包含正确的 keywords
+- [x] version 字段为 1.3.0
+- [ ] 执行 npm login
+- [ ] 执行 npm publish --access public
+- [ ] 验证发布成功: https://www.npmjs.com/package/sen-dev-patterns
+
+### NPM 发布 API
+
+**发布命令**:
+```bash
+npm publish --access public
+```
+
+**所需权限**: npm 账号 (免费账号即可发布 public 包)
+
+**注意事项**:
+- 包名 `sen-dev-patterns` 已被占用？可改为 `sen-dev-patterns-skill`
+- 每个 npm 版本号只能使用一次，发布前确保 version 正确
+
+---
+
+## 各平台发布状态
+
+| 平台 | 状态 | 地址 |
+|------|------|------|
+| GitHub | ✅ 已发布 | https://github.com/the13ai/sen-dev-patterns |
+| Gitee | ⏳ 待配置 | 需要 Gitee Token |
+| NPM | ⏳ 待发布 | 需要 Node.js + npm 账号 |
+| ClawHub | ⏳ 待提交 | https://clawhub.ai/import |
