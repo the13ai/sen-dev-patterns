@@ -1,0 +1,25 @@
+{
+  "name": "@the13ai/sen-dev-patterns",
+  "version": "1.4.0",
+  "description": "个人开发提效Skill - 沉淀页面布局、样式风格、代码模块、算法库、踩坑记录",
+  "main": "SKILL.md",
+  "files": [
+    "SKILL.md",
+    "references/"
+  ],
+  "keywords": [
+    "codebuddy",
+    "skill",
+    "dev-patterns",
+    "email-system",
+    "gui",
+    "excel",
+    "debug"
+  ],
+  "author": "sen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the13ai/sen-dev-patterns.git"
+  }
+}
