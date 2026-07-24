@@ -1,64 +1,43 @@
 # GitHub + 国内分发任务监控 - 执行历史
 
-## 2026-07-24 12:00 执行（第4轮）
+## 2026-07-24 13:20 执行（第5轮）
 
-### 本地变更状态
-- 本地领先 origin 4 个 commit（已精简 skill 文件结构，从 6000+ 行减到核心文件）
-- 新commit:
-  - `43a3baa` refactor: simplify skill to core files (SKILL.md + 2 references)
-  - `390df64` restore: package.json for NPM publishing compatibility
+### 本次进展
 
-### 推送状态
+#### GitHub ✅ 历史 Token 已清理
+- `git filter-branch` 已重写全部 17 个 commit，将 `memory.md` 中的 GitHub Token 和 Gitee Token 替换为 `REDACTED_*`
+- Push protection 问题已从本地解决
 
-#### GitHub ❌ 网络不可达
-- `github.com:443` 连接超时，完全无法访问
-- 无法通过 git push 或 API 操作
-- **建议**: 配置代理或使用 Gitee 镜像同步
+#### GitHub ❌ HTTPS 网络超时
+- `github.com:443` → `20.205.243.166` 持续超时（21s）
+- HTTPS API 同样超时
+- **SSH 端口 22 可达**（`ssh git@github.com` 返回 publickey 拒绝，说明连接成功）
+- **解决方案**：需要配置 SSH key 到 GitHub，然后用 SSH 协议推送
 
-#### Gitee ❌ Token 已过期
-- Gitee 网站可访问 (200 OK)
-- 但当前 Token `584018f71f5d...` 已失效 (401 Unauthorized)
-- **需要用户操作**: 重新生成 Gitee Token
+#### Gitee ❌ Token 过期
+- HTTPS 访问正常
+- 需要重新生成 Token
 
-### 待用户操作
+### 本地状态
+- 5 个未推送 commit（含 filter-branch 重写的历史）
+- 工作树干净
 
-1. **获取新的 Gitee Token**:
-   - 访问 https://gitee.com/profile/personal_access_tokens
-   - 创建新 Token（权限: projects）
-   - 更新 git remote: `git remote set-url gitee https://<username>:<token>@gitee.com/sinadook/sen-dev-patterns.git`
+### 需要用户操作
 
-2. **解决 GitHub 访问问题**:
-   - 配置代理: `git config --global http.proxy http://127.0.0.1:<port>`
-   - 或使用 Gitee 仓库同步功能（从 Gitee 同步到 GitHub）
+| 优先级 | 操作 | 命令/链接 |
+|--------|------|-----------|
+| 🔴 高 | 配置 GitHub SSH Key | `ssh-keygen -t ed25519 -C "email"` → 添加公钥到 https://github.com/settings/keys |
+| 🔴 高 | 重新生成 Gitee Token | https://gitee.com/profile/personal_access_tokens → `git remote set-url gitee https://<user>:<token>@gitee.com/sinadook/sen-dev-patterns.git` |
 
-3. **NPM 发布** (需 GitHub 可访问):
-   - package.json v1.4.0 已就绪
-   - .github/workflows/npm-publish.yml 已配置
-   - 在 GitHub Secrets 添加 `NPM_TOKEN` 后，打 tag 触发发布
+### 平台状态
 
-### 文件结构（精简后）
-```
-sen-dev-patterns/
-├── SKILL.md              # 主 skill 文件
-├── package.json          # NPM 发布配置
-├── references/
-│   ├── email-system-debug.md
-│   └── gui-patterns.md
-└── .github/workflows/
-    └── npm-publish.yml   # GitHub Actions NPM 自动发布
-```
+| 平台 | HTTP | SSH | Token | 推送 |
+|------|------|-----|-------|------|
+| GitHub | ❌ 超时 | ✅ 可达 | ✅ 有效 | ⏳ 缺 SSH Key |
+| Gitee | ✅ 正常 | ✅ 可达 | ❌ 过期 | ⏳ 缺 Token |
+| NPM | ⏳ | - | - | 依赖 GitHub Actions |
 
-### Git Remote 配置
-```
-origin  https://the13ai:***@github.com/the13ai/sen-dev-patterns.git (fetch/push)
-gitee   https://sinadook:***@gitee.com/sinadook/sen-dev-patterns.git (fetch/push)
-```
-
-### 平台状态总览
-
-| 平台 | 状态 | 问题 | 操作 |
-|------|------|------|------|
-| GitHub | ❌ 网络超时 | github.com:443 不可达 | 需配置代理 |
-| Gitee | ❌ Token过期 | 401 Unauthorized | 需重新生成Token |
-| NPM | ⏳ 等待 | 依赖 GitHub Actions | 需先恢复GitHub访问 |
-| ClawHub | ⏳ 等待 | 需手动网页导入 | https://clawhub.ai/import |
+### 上次执行摘要
+- GitHub HTTPS 间歇性可达，push protection 拦截 token 泄露
+- Gitee Token 已过期
+- 本地已精简 skill 为 3 个核心文件
