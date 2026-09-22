@@ -1,43 +1,30 @@
 # GitHub + 国内分发任务监控 - 执行历史
 
-## 2026-07-24 13:20 执行（第5轮）
+## 2026-09-22 执行（第6轮）
 
-### 本次进展
+### 里程碑：GitHub 发布完成 ✅
 
-#### GitHub ✅ 历史 Token 已清理
-- `git filter-branch` 已重写全部 17 个 commit，将 `memory.md` 中的 GitHub Token 和 Gitee Token 替换为 `REDACTED_*`
-- Push protection 问题已从本地解决
+- HTTPS 网络恢复，`git push origin master` 成功：`89ad85c..694e7dd master -> master`
+- 远程 HEAD 与本地一致（`694e7dd`），全部 6 个 commit 已同步
+- 历史中的 token 已在上一轮用 filter-branch 清理为 REDACTED_*
+- 仓库地址: https://github.com/the13ai/sen-dev-patterns
 
-#### GitHub ❌ HTTPS 网络超时
-- `github.com:443` → `20.205.243.166` 持续超时（21s）
-- HTTPS API 同样超时
-- **SSH 端口 22 可达**（`ssh git@github.com` 返回 publickey 拒绝，说明连接成功）
-- **解决方案**：需要配置 SSH key 到 GitHub，然后用 SSH 协议推送
+### 其余平台状态
 
-#### Gitee ❌ Token 过期
-- HTTPS 访问正常
-- 需要重新生成 Token
+| 平台 | 状态 | 阻塞点 | 待用户操作 |
+|------|------|--------|-----------|
+| GitHub | ✅ 已发布 | 无 | 无 |
+| Gitee | ❌ 推送失败 | Token 过期 (403) | https://gitee.com/profile/personal_access_tokens 重新生成 → `git remote set-url gitee https://sinadook:<新token>@gitee.com/sinadook/sen-dev-patterns.git` |
+| NPM | ⏳ 未发布 | 本地未登录 (`npm whoami` 报 ENEEDAUTH)；GitHub Actions 需 NPM_TOKEN secret | ① `npm login` 后本地 `npm publish --access public`，或 ② GitHub Secrets 加 NPM_TOKEN 后 `git tag v1.4.0 && git push origin v1.4.0` 触发 Actions |
+| ClawHub | ⏳ | 需网页操作 | https://clawhub.ai/import 用 GitHub URL 导入 |
 
-### 本地状态
-- 5 个未推送 commit（含 filter-branch 重写的历史）
-- 工作树干净
+### 技术要点
 
-### 需要用户操作
+- GitHub HTTPS 在本环境间歇性可达，重试有效；GitHub REST API (api.github.com) 仍常超时，但 git 协议可用
+- 本地 package.json v1.4.0 就绪，`.github/workflows/npm-publish.yml` 已配置（tag `v*` 触发）
+- Gitee Token 584018f7...（已存 remote URL）自 2026-04 起持续 403 过期，多轮确认失效
 
-| 优先级 | 操作 | 命令/链接 |
-|--------|------|-----------|
-| 🔴 高 | 配置 GitHub SSH Key | `ssh-keygen -t ed25519 -C "email"` → 添加公钥到 https://github.com/settings/keys |
-| 🔴 高 | 重新生成 Gitee Token | https://gitee.com/profile/personal_access_tokens → `git remote set-url gitee https://<user>:<token>@gitee.com/sinadook/sen-dev-patterns.git` |
+### 下轮动作
 
-### 平台状态
-
-| 平台 | HTTP | SSH | Token | 推送 |
-|------|------|-----|-------|------|
-| GitHub | ❌ 超时 | ✅ 可达 | ✅ 有效 | ⏳ 缺 SSH Key |
-| Gitee | ✅ 正常 | ✅ 可达 | ❌ 过期 | ⏳ 缺 Token |
-| NPM | ⏳ | - | - | 依赖 GitHub Actions |
-
-### 上次执行摘要
-- GitHub HTTPS 间歇性可达，push protection 拦截 token 泄露
-- Gitee Token 已过期
-- 本地已精简 skill 为 3 个核心文件
+- Gitee/NPM Token 由用户更新后，自动推送/发布即可完成
+- 若 NPM_TOKEN secret 已配置，可尝试打 tag 触发自动发布
